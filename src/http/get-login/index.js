@@ -22,10 +22,8 @@ const authenticate = (req, callback, service) => {
     )}`;
     return {
       status: 307,
-      headers: {
-        'content-type': 'text/html',
-        location: redirectUrl,
-      },
+      cookie: req.session,
+      location: redirectUrl,
     };
   } else {
     // Otherwise, we have a ticket and should validate it
@@ -34,11 +32,10 @@ const authenticate = (req, callback, service) => {
 };
 
 const authenticateCasUser = async req => {
-  console.log(process.env);
   console.log('authenticate cas user');
-  const sess = await arc.http.session.read(req);
-  console.log(sess);
-  authenticate(
+  const { session } = req;
+  console.log({ session });
+  return authenticate(
     req,
     async (err, status, username, extended) => {
       username = username && username.trim();
@@ -51,19 +48,14 @@ const authenticateCasUser = async req => {
           },
         };
       } else {
-        const redirectTo = '/sdtools/adduser';
-        const cookie = await arc.http.session.write({
-          loggedIn: status,
-          username,
-          casAttributes: extended,
-        });
-        console.log(cookie);
+        session.loggedIn = status;
+        session.username = username;
+        session.casAttributes = extended;
+        console.log({ session });
         return {
+          cookie: session,
           status: 302,
-          headers: {
-            'set-cookie': cookie,
-            location: redirectTo,
-          },
+          location: session.redirectTo,
         };
       }
     },
@@ -72,20 +64,14 @@ const authenticateCasUser = async req => {
 };
 
 const handler = async req => {
-  console.log(req);
+  const redirectTo = arc.http.helpers.url(req.session.redirectTo);
   return {
-    status: 200,
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(req.session),
+    status: 302,
+    headers: {
+      'content-type': 'text/plain; charset=utf8',
+      location: redirectTo,
+    },
   };
-  // const redirectTo = arc.http.helpers.url(req.session.redirectTo);
-  // return {
-  //   status: 302,
-  //   headers: {
-  //     'content-type': 'text/plain; charset=utf8',
-  //     location: redirectTo,
-  //   },
-  // };
 };
 
-exports.handler = arc.http.async(handler);
+exports.handler = arc.http.async(authenticateCasUser, handler);

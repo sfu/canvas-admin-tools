@@ -4,7 +4,6 @@ const requireLogin = async req => {
   const redirectTo = arc.http.helpers.url(req.path);
   const { session } = req;
   session.redirectTo = redirectTo;
-  session.wtf = 'wtf';
   if (!session.loggedIn) {
     return {
       cookie: session,
@@ -15,19 +14,9 @@ const requireLogin = async req => {
 };
 
 const handler = async req => {
-  const { session } = req;
-  if (!session.loggedIn) {
-    session.redirectTo = arc.http.helpers.url(req.path);
-    session.wtf = 'wtf';
-    return {
-      cookie: session,
-      status: 302,
-      location: '/login',
-    };
-  } else {
-    return {
-      headers: { 'content-type': 'text/html; charset=utf8' },
-      body: `
+  return {
+    headers: { 'content-type': 'text/html; charset=utf8' },
+    body: `
       <!DOCTYPE html>
       <html lang="en">
       <head>
@@ -67,7 +56,7 @@ const handler = async req => {
       </style>
       </head>
       <body class="padding-32">
-      <form action="/sdtools/adduser" method="post">
+      <form action="/adduser" method="post">
       <label for="courseId">Course ID</label><input name="courseId" id="courseId" type="text"/><br />
       <label for="role">Role</label><select name="role" id="role">
       <option value="teacher">Teacher</option>
@@ -84,8 +73,7 @@ const handler = async req => {
       </body>
       </html>
       `,
-    };
-  }
+  };
 };
 
 exports.handler = arc.http.async(requireLogin, handler);
