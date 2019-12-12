@@ -8,3 +8,4 @@ public/client.*
 .arc-env
 sam.*
 .vscode
+src/http/**/node_modules

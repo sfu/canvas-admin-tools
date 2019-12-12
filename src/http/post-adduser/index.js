@@ -22,9 +22,9 @@ const handler = async req => {
       - upload CSV to Canvas, get progress object
       - return progress
   */
-
-  const { courseId, users, role } = req.body;
-
+  console.log(arc.http.helpers.bodyParser(req));
+  const { courseId, role } = req.body;
+  const users = req.body['users[]'];
   // get the course to ensure it exists and has a SIS ID
   let course;
   try {
