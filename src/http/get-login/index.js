@@ -9,62 +9,43 @@ const cas = new CAS({
   service: CAS_SERVICE,
 });
 
-const authenticate = (req, callback, service) => {
-  // adapted from https://github.com/grahamb/node-cas/blob/CASv3/lib/cas.js
+const authenticateCasUser = async req => {
+  const { session } = req;
 
-  // get the ticket from the URL
   const ticket = req.query.ticket;
-
   if (!ticket) {
-    // If no ticket, we haven't been redirected to CAS and should do so
     const redirectUrl = `${CAS_BASE_URL}/login?service=${encodeURIComponent(
-      service
+      CAS_SERVICE
     )}`;
     return {
-      status: 307,
+      status: 302,
       cookie: req.session,
       location: redirectUrl,
     };
-  } else {
-    // Otherwise, we have a ticket and should validate it
-    cas.validate(ticket, callback, service);
+  }
+
+  const {
+    authenticated,
+    username,
+    extendedAttributes,
+  } = await cas.validatePromise(ticket, CAS_SERVICE);
+
+  if (authenticated) {
+    session.loggedIn = authenticated;
+    session.username = username.trim();
+    session.casAttributes = extendedAttributes.attributes;
+    return {
+      cookie: session,
+      status: 302,
+      location: session.redirectTo,
+    };
   }
 };
 
-const authenticateCasUser = async req => {
-  console.log('authenticate cas user');
-  const { session } = req;
-  console.log({ session });
-  return authenticate(
-    req,
-    async (err, status, username, extended) => {
-      username = username && username.trim();
-      if (err) {
-        console.log('Error authenticating user with CAS: ', err);
-        return {
-          status: 500,
-          body: {
-            message: `Error authenticating user with CAS: ${err}`,
-          },
-        };
-      } else {
-        session.loggedIn = status;
-        session.username = username;
-        session.casAttributes = extended;
-        console.log({ session });
-        return {
-          cookie: session,
-          status: 302,
-          location: session.redirectTo,
-        };
-      }
-    },
-    CAS_SERVICE
-  );
-};
-
 const handler = async req => {
-  const redirectTo = arc.http.helpers.url(req.session.redirectTo);
+  const { session } = req;
+  const redirectTo = arc.http.helpers.url(session.redirectTo);
+  delete session.redirectTo;
   return {
     status: 302,
     headers: {
