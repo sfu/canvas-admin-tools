@@ -1,5 +1,6 @@
 const fs = require('fs').promises;
 const arc = require('@architect/functions');
+const requireLogin = require('@architect/shared/requireLogin');
 const userBio = require('@architect/shared/userBio');
 const canvasGet = require('@architect/shared/canvasGet');
 const postSISFile = require('./postSISFile');
