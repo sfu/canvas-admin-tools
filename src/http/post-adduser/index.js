@@ -23,9 +23,9 @@ const handler = async req => {
       - upload CSV to Canvas, get progress object
       - return progress
   */
-  console.log(arc.http.helpers.bodyParser(req));
   const { courseId, role } = req.body;
-  const users = req.body['users[]'];
+  const users = req.body['users[]'].filter(Boolean);
+
   // get the course to ensure it exists and has a SIS ID
   let course;
   try {
@@ -117,7 +117,6 @@ const handler = async req => {
       body: uploadResp,
     };
   } catch (error) {
-    console.log(error);
     return {
       status: 500,
       headers: {
@@ -130,4 +129,4 @@ const handler = async req => {
   }
 };
 
-exports.handler = arc.http.async(handler);
+exports.handler = arc.http.async(requireLogin, handler);
