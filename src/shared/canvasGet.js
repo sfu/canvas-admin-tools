@@ -4,6 +4,7 @@ const { CANVAS_URL_BASE, CANVAS_API_TOKEN } = process.env;
 module.exports = async path => {
   try {
     const data = await request.get(`${CANVAS_URL_BASE}/api/v1/${path}`, {
+      json: true,
       headers: {
         authorization: `Bearer ${CANVAS_API_TOKEN}`,
       },

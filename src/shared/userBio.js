@@ -7,9 +7,10 @@ const URL =
 module.exports = async username => {
   try {
     const bio = await request.get(URL, {
+      json: true,
       qs: {
         username,
-        art_token: ART_TOKEN,
+        art: ART_TOKEN,
       },
     });
     return bio;
