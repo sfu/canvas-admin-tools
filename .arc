@@ -2,11 +2,14 @@
 init
 
 @http
-
-# SERVICE DESK: ADD USER TO COURSE
 get /login
 get /adduser
 post /adduser
+
+@tables
+arc-sessions
+  _idx *String
+
 
 ## Uncomment the following lines to deploy to AWS!
 # @aws
