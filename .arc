@@ -10,6 +10,7 @@ post /adduser
 arc-sessions
   _idx *String
 
+@static
 
 ## Uncomment the following lines to deploy to AWS!
 # @aws
