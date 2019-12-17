@@ -1,0 +1,43 @@
+.title {
+  margin-top: 1em;
+  margin-left: 100px;
+}
+
+.sfu_header {
+  background-color: #eee;
+  background-image: linear-gradient(to right top, #ffffff, #f6f6f6, #eeeeee, #e5e5e5, #dddddd);
+  border-top: 5px solid #003087;
+}
+
+.rainbow {
+  background: #3d3935 url("./bg-ribbon-small.png") -78px 0 no-repeat;
+  content: "";
+  height: 25px;
+  width: 100%;
+}
+
+.sfu_logo {
+  background: url('./sfu-logo@2x.png') no-repeat;
+  background-size: cover;
+  height: 46px;
+  width: 300px;
+}
+
+
+
+@media screen and (max-width: 767px) {
+  .childless {
+    padding-bottom: 0.5rem !important;
+  }
+  
+  .title {
+    margin-left: 0;
+    margin-top: 1em;
+  }
+  
+  .rainbow {
+    background: none;
+    height: 1px;
+    background: #d2e1e6;
+  }
+}

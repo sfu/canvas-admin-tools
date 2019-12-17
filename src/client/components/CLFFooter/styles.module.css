@@ -1,0 +1,42 @@
+.footer {
+  color: #aaa;
+  padding-left: 10.4%;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  clear: left;
+  float: left;
+  font-size: .8em;
+  line-height: 1.3125rem;
+  font-family: "DINWeb", sans-serif;
+  font-weight: normal;
+  background-color: #3d3935;
+  width: 100%;
+}
+
+.footer ul {
+  list-style: none;
+}
+
+.footer a, .footer a:hover {
+  color: #fff;
+}
+
+li.header {
+  font-size: .8181818181818181em;
+  line-height: 1.3125em;
+  font-family: "DINWeb", sans-serif;
+  font-weight: normal;
+  color: #e0d10a;
+  text-transform: uppercase;
+  padding-bottom: 8px;
+}
+
+.header a {
+  color: inherit;
+}
+
+.land_acknowledgement {
+  font-size: 0.7rem;
+  font-style: italic;
+  margin-top: 1em;
+}
