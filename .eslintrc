@@ -1,5 +1,5 @@
 {
-  "extends": ["unobtrusive"],
+  "extends": ["unobtrusive", "eslint-plugin-react"],
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module"

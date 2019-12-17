@@ -10,8 +10,10 @@
   "license": "ISC",
   "devDependencies": {
     "aws-sdk": "^2.586.0",
+    "babel-preset-react": "^6.24.1",
     "eslint": "^6.7.2",
     "eslint-config-unobtrusive": "^1.2.5",
+    "eslint-plugin-react": "^7.17.0",
     "prettier": "^1.19.1"
   },
   "prettier": {
