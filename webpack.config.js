@@ -15,11 +15,20 @@ module.exports = {
       {
         oneOf: [
           {
-            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+            // test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+            test: /\.(png|woff|woff2|eot|ttf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             loader: 'url-loader',
             options: {
               limit: 10000,
               name: 'static/media/[name].[hash:8].[ext]',
+            },
+          },
+
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: {
+              loader: 'babel-loader',
             },
           },
 
@@ -59,6 +68,7 @@ module.exports = {
 
           // Adds support for CSS Modules (https://github.com/css-modules/css-modules)
           // using the extension .module.css
+
           {
             test: cssModuleRegex,
             use: [
@@ -67,6 +77,7 @@ module.exports = {
                 loader: 'css-loader',
                 options: {
                   modules: {
+                    mode: 'local',
                     localIdentName: '[name]__[local]___[hash:base64:5]',
                   },
                   importLoaders: 1,
@@ -91,14 +102,6 @@ module.exports = {
             ],
           },
 
-          {
-            test: /\.(js|jsx)$/,
-            exclude: /node_modules/,
-            use: {
-              loader: 'babel-loader',
-            },
-          },
-
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
           // In production, they would get copied to the `build` folder.
@@ -115,6 +118,8 @@ module.exports = {
               name: 'static/media/[name].[hash:8].[ext]',
             },
           },
+          // ** STOP ** Are you adding a new loader?
+          // Make sure to add the new loader(s) before the "file" loader.
         ],
       },
     ],
