@@ -2,6 +2,7 @@
 init
 
 @http
+get /
 get /login
 get /adduser
 post /adduser
