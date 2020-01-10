@@ -10,7 +10,7 @@ const handler = async req => {
   /* input is a JSON object with shape
       {
         courseId: 12345,
-        users: [ computingId],
+        users: [ computingId ],
         role: "teacher|student|ta|observer"
       }
   */
@@ -24,8 +24,9 @@ const handler = async req => {
       - return progress
   */
   const { courseId, role } = req.body;
-  const users = req.body['users[]'].filter(Boolean);
+  const users = [...new Set(req.body.users.filter(Boolean))];
 
+  console.log({ courseId, role, users });
   // get the course to ensure it exists and has a SIS ID
   let course;
   try {
@@ -37,16 +38,16 @@ const handler = async req => {
           'content-type': 'application/json',
         },
         body: JSON.stringify({
-          message: `Course with ID ${courseId} does not have a SIS ID.`,
+          error: `Course with ID ${courseId} does not have a SIS ID.`,
         }),
       };
     }
   } catch (response) {
-    let message;
+    let error;
     if (response.statusCode === 404) {
-      message = `No Canvas course with ID ${courseId} could be found.`;
+      error = `No Canvas course with ID ${courseId} could be found.`;
     } else {
-      message = `An unknown error occurred.`;
+      error = `An unknown error occurred.`;
     }
 
     return {
@@ -55,7 +56,7 @@ const handler = async req => {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        message,
+        error,
       }),
     };
   }
@@ -77,7 +78,7 @@ const handler = async req => {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        message,
+        error: message,
       }),
     };
   }
@@ -101,7 +102,7 @@ const handler = async req => {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        message: 'Error writing CSV file',
+        error: 'Error writing CSV file',
       }),
     };
   }
@@ -123,10 +124,10 @@ const handler = async req => {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        message: 'Error uploading CSV file',
+        error: 'Error uploading CSV file',
       }),
     };
   }
 };
 
-exports.handler = arc.http.async(requireLogin, handler);
+exports.handler = arc.http.async(handler);
