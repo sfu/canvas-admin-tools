@@ -42,6 +42,8 @@
   },
   "dependencies": {
     "@architect/functions": "^3.4.14",
-    "@sfu/sfu-fonts": "git+https://github.com/sfu/sfu-fonts.git"
+    "@sfu/sfu-fonts": "git+https://github.com/sfu/sfu-fonts.git",
+    "@xstate/react": "^0.8.1",
+    "xstate": "^4.7.6"
   }
 }
